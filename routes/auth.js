@@ -3,7 +3,7 @@ const router = express.Router();
 const User = require('../models/user_model.js')
 
 router.get('/home', (req, res)=>{
-    res.render('home')
+    res.render('home');
 }
 );
 
