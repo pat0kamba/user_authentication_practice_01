@@ -1,0 +1,15 @@
+body{
+    background-image:url('../images/Dessert-unsplash.jpg');
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+.main{
+    background-color:rgba(255,255,255, 0.8);
+    width:40%;
+    height:300px;
+    position:absolute;
+    top:50%;
+    transform:translateY(-25%);
+    padding:20px 0;
+}
