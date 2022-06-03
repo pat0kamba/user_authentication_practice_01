@@ -12,11 +12,11 @@
 </head>
 <body>
     <div class="main">
-        <form method="POST" action="/auth/register">
+        <form method="post" action="/auth/register">
             <label id="user">Username</label><br>
-            <input type="text" placeholder="Username" id="username" name="username"></input><br>
+            <input type="text" placeholder="Username or Email" id="user" name="username" autocomplete="off"></input><br>
             <label id="password">Password</label><br>
-            <input type="password" placeholder="Type password" id="key" name="password"></input><br>
+            <input type="password" placeholder="Type password" id="password" name="password" autocomplete="off"></input><br>
             <button type="submit" id="btn" >Register</button>
         </form>
     </div>
