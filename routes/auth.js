@@ -41,19 +41,23 @@ router.post('/register', (req, res)=>{
     console.log("username: ", username);
     console.log("password: ", password);
   
+    const user = new User({username:username});
     // using the register passport local method which takes the username, the password and a callback as argument
-    User.register({username:username}, password, function(error,user){
-   
-            
-        if(!error){
+    User.register(user, password, function(error,user){
+        
+        if(error)
+        {
+            console.log('there is an error');
+            res.redirect('/auth/register');
+        }
+        // if no error, authenticate the user using passport local   
+        else{
             console.log('user authentication succeeded');
-            User.authenticate("local")(req, res, function(){
+            passport.authenticate("local")(req, res, function(){
                 res.redirect('/auth/success');
             });
         }
-        console.log('there is an error');
-        res.redirect('/auth/register');
-            // if no error, authenticate the user using passport local
+       
            
         
     })
@@ -74,7 +78,7 @@ router.post('/login', (req, res)=>{
          console.log(error)
      }else{
          // if there is not error, authenticate the user using the local strategy
-         User.authenticate('local')(req, res, function(){
+         passport.authenticate('local')(req, res, function(){
              // if user is authenticated, redirect the user to the success page
              res.redirect('/auth/success')
          })
