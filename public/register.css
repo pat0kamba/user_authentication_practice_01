@@ -23,3 +23,17 @@ input[type=text],input[type=password]
 width:100%;
 margin-bottom:15px;
 }
+
+.google{
+    background-color:#DD4B39;
+    margin-top:10px;
+}
+a{
+    text-decoration:none;
+    font-weight:bold;
+    color:#fff;
+}
+.facebook{
+    background-color:#3B5998;
+    margin-top:10px;
+}

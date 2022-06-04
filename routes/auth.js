@@ -2,8 +2,21 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/user_model.js');
 const passport = require('passport');
-// const passportLocalMongoose = require('passport-local-mongoose');
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
+
+
+passport.use(new GoogleStrategy({
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    callbackURL: "https://localhost:5000/auth/google/success"
+  },
+  function(accessToken, refreshToken, profile, cb) {
+    User.findOrCreate({ googleId: profile.id }, function (err, user) {
+      return cb(err, user);
+    });
+  }
+));
 //passport local configuration on the model
 
 // passport use a local strategy
@@ -14,12 +27,16 @@ passport.use(User.createStrategy());
 // need to be able to create a session and read from a session created
 // passport serialize and deserialize the User model
 
-passport.serializeUser(function(User, done) {
-    done(null, User);
+passport.serializeUser(function(user, done) {
+    process.nextTick(function() {
+      done(null, { id: user.id, username: user.username, name: user.name });
+    });
   });
   
-  passport.deserializeUser(function(User, done) {
-    done(null, User);
+  passport.deserializeUser(function(user, done) {
+    process.nextTick(function() {
+      return done(null, user);
+    });
   });
 
 router.get('/home', (req, res)=>{
@@ -35,6 +52,15 @@ router.get('/register', (req, res)=>{
     res.render('register')
 });
 
+router.get('/google',
+  passport.authenticate('google', { scope: ['profile'] }));
+
+router.get('/google/success', 
+  passport.authenticate('google', { failureRedirect: '/auth/login' }),
+  function(req, res) {
+    // Successful authentication, redirect home.
+    res.redirect('/auth/home');
+  });
 // register the user, hash their password
 router.post('/register', (req, res)=>{
     const { password, username} = req.body;
