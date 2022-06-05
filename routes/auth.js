@@ -9,7 +9,7 @@ const GoogleStrategy = require('passport-google-oauth20').Strategy;
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: "https://localhost:5000/auth/google/success"
+    callbackURL: "http://localhost:5000/auth/google/success"
   },
   function(accessToken, refreshToken, profile, cb) {
     User.findOrCreate({ googleId: profile.id }, function (err, user) {
@@ -53,13 +53,13 @@ router.get('/register', (req, res)=>{
 });
 
 router.get('/google',
-  passport.authenticate('google', { scope: ['profile'] }));
+  passport.authenticate('google', { scope: ['profile', 'email'] }));
 
 router.get('/google/success', 
-  passport.authenticate('google', { failureRedirect: '/auth/login' }),
+  passport.authenticate('google', { failureRedirect: '/auth/login'}),
   function(req, res) {
     // Successful authentication, redirect home.
-    res.redirect('/auth/home');
+    res.redirect('/auth/success');
   });
 // register the user, hash their password
 router.post('/register', (req, res)=>{
